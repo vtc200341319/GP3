@@ -1,0 +1,68 @@
+Scenario
+
+You are required to configure the network.
+
+Addressing Table
+
+Device	Interface	IP Address
+Edge Router	Fa0/0	172.16.254.1/30
+	Fa0/1	172.16.254.5/30
+	Fa1/0	By DHCP from ISP
+DLS1	G1/0/23	172.16.2.252/24
+	G1/0/24	172.16.254.2/30
+	Channel Group 1	172.16.1.1/30
+	Channel Group 3	172.16.1.9/30
+	Channel Group 5	172.16.1.17/30
+DLS2	G1/0/23	172.16.2.253/24
+	G1/0/24	172.16.254.6/30
+	Channel Group 1	172.16.1.2/30
+	Channel Group 2	172.16.1.5/30
+	Channel Group 4	172.16.1.13/30
+DLS3	Channel Group 2	172.16.1.6/30
+	Channel Group 3	172.16.1.10/30
+	Channel Group 6	172.16.1.21/30
+DLS4	Channel Group 4	172.16.1.14/30
+	Channel Group 5	172.16.1.18/30
+	Channel Group 6	172.16.1.22/30
+Core Server	-	172.16.2.1/24
+
+
+
+Requirements
+
+Basic Configuration
+
+•	Configure the interfaces of all routers and switches.
+
+
+Routed Port and Layer 3 Etherchannel
+
+•	Configure all ports connecting DLS1, DLS2, DLS3 and DLS4 as Routed Ports.
+•	Configure Layer 3 Etherchannel group between DLS switches.
+
+Channel Group	Mode	Link
+1	Non-negotiate	DLS1 (G1/0/3-4) <> DLS2 (G1/0/3-4)
+2	Non-negotiate	DLS2 (G1/0/9-10) <> DLS3 (G1/0/9-10)
+3	LACP	DLS1 (G1/0/1-2) (Active) <> DLS3 (G1/0/1-2)
+4	LACP	DLS2 (G1/0/5-6) (Active) <> DLS4 (G1/0/5-6)
+5	PaGP	DLS1 (G1/0/9-10) (Desirable) <> DLS4 (G1/0/9-10)
+6	PaGP	DLS3 (G1/0/7-8) (Desirable) <> DLS4 (G1/0/7-8)
+
+Inter-VLAN Routing and Default Route
+
+•	Enable IP Routing.
+•	Configure RIPv2 routing inside the Network. 
+•	Set a default route to Internet in a suitable device.
+•	The default route use exit-interface format.
+•	Propagate the default route to the whole network.
+
+HSRP
+
+•	Configure HSRP group in DLS1 and DLS2 for the server in Core Network.
+
+HSRP Group	VLAN	Virtual IP	DLS1 Priority	DLS2 Priority
+1	-	172.16.2.254	110 (Preempt)	130
+
+
+Connectivity
+•	Verify full connectivity from each device to Internet (IP Address is 8.8.8.8).
